@@ -1,6 +1,6 @@
 ## libhustpass
 
-`pass.hust.edu.cn` changed it's login encryption from RSA to **SB** DES
+Since the fucking `pass.hust.edu.cn` site has changed the encryption method from RSA to **SB** DES, this lib would let you fuck it again.
 
 #### Usage
 
@@ -24,7 +24,7 @@ print(ret.text)
 
 #### Implementation
 
-`des.js` use a spacial `__pc1` (sbDes.py:270) to generate DES 56 byte key
+`des.js` uses some spacial `__pc1` (sbDes.py:270) to generate the DES 56 bytes key
 
 ```python
 __pc1 = [56, 48, 40, 32, 24, 16,  8,
@@ -38,7 +38,7 @@ __pc1 = [56, 48, 40, 32, 24, 16,  8,
 ]
 ```
 
-So I modified pyDes.py from python library `pyDes` to sbDes.py
+So I modified pyDes.py(from the python library `pyDes`) to sbDes.py
 
 #### License
 
