@@ -7,7 +7,7 @@
 ```python
 from libhustpass import main
 
-ticket = main.doLogin("username","<REDACTED>","https://one.hust.edu.cn/dcp/")
+ticket = main.doLogin("username","password","https://one.hust.edu.cn/dcp/")
 
 # now copy ticket to browser is ok
 # or open a new session in script
@@ -40,6 +40,6 @@ __pc1 = [56, 48, 40, 32, 24, 16,  8,
 
 So I modified pyDes.py from python library `pyDes` to sbDes.py
 
-#### Licence
+#### License
 
 WTFPL
