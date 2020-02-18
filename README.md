@@ -1,6 +1,6 @@
 ## libhustpass
 
-`pass.hust.edu.cn` changed it's login encryption from RSA to **SB** DES
+`pass.hust.edu.cn` changed its login encryption from RSA to **SB** DES
 
 #### Usage
 
