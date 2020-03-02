@@ -26,7 +26,7 @@ print(ret.text)
 
 #### Implementation
 
-`des.js` uses some spacial `__pc1` (sbDes.py:270) to generate the DES 56 bytes key
+`des.js` uses some spacial `__pc1` (sbDes.py:270) to generate the DES 56-bit key
 
 ```python
 __pc1 = [56, 48, 40, 32, 24, 16,  8,
