@@ -42,6 +42,16 @@ __pc1 = [56, 48, 40, 32, 24, 16,  8,
 
 So I modified pyDes.py(from the python library `pyDes`) to sbDes.py
 
+#### changelog
+
+##### 20200501 support captcha
+
+`pass.hust.edu.cn` force user input captcha since 20200501
+
+`captcha.py` uses library [Tesseract](https://tesseract-ocr.github.io/) to auto-fuck captcha
+
+Install Tesseract first !
+
 #### License
 
 WTFPL

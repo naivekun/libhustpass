@@ -1,6 +1,8 @@
 import libhustpass.sbDes as sbDes
+import libhustpass.captcha as FuckCaptcha
 import requests
 import re
+import random
 
 proxies = {"http": "http://127.0.0.1:8080", "https": "http://127.0.0.1:8080"}
 
@@ -53,6 +55,8 @@ def strenc(data, first_key, second_key, third_key):
 def doLogin(username, password, url):
     r = requests.session()
     login_html = r.get(url)
+    captcha_content = r.get("https://pass.hust.edu.cn/cas/code?"+str(random.random()), stream=True)
+    captcha_content.raw.decode_content = True
     nonce = re.search(
         '<input type="hidden" id="lt" name="lt" value="(.*)" />', login_html.text
     ).group(1)
@@ -60,6 +64,7 @@ def doLogin(username, password, url):
         '<form id="loginForm" action="(.*)" method="post">', login_html.text
     ).group(1)
     post_params = {
+        "code": FuckCaptcha.Fuckit(captcha_content.raw),
         "rsa": strenc(username + password + nonce, "1", "2", "3"),
         "ul": len(username),
         "pl": len(password),
