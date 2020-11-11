@@ -1,5 +1,7 @@
 # libhustpass
 
+![Python package](https://github.com/naivekun/libhustpass/workflows/Python%20package/badge.svg?branch=master)
+
 
 Since the fucking `pass.hust.edu.cn` site has changed the encryption method from RSA to **SB** DES, this lib would let you fuck it again.
 
@@ -29,7 +31,7 @@ print(ret.text)
 
 ```
 
-#### Implementation
+## Implementation
 
 `des.js` uses some spacial `__pc1` (sbDes.py:270) to generate the DES 56-bit key
 
@@ -48,15 +50,15 @@ __pc1 = [
 
 So I modified pyDes.py(from the python library `pyDes`) to sbDes.py
 
-#### changelog
+## changelog
 
-##### 20201111
+#### 20201111
 
 Rebuild shit mountain && add tests
 
 accuracy is 995/1000
 
-##### 20200501 support captcha
+#### 20200501 support captcha
 
 `pass.hust.edu.cn` force user input captcha since 20200501
 
@@ -64,6 +66,6 @@ accuracy is 995/1000
 
 Install Tesseract first !
 
-#### License
+## License
 
 WTFPL
