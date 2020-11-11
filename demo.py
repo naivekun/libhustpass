@@ -1,6 +1,6 @@
-from libhustpass import main
+from libhustpass import login
 
-ticket = main.doLogin("username", "<REDACTED>", "https://one.hust.edu.cn/dcp/")
+ticket = login("username", "password", "https://one.hust.edu.cn/dcp/")
 
 # now copy ticket to browser is ok
 # or open a new session

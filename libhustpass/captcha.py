@@ -1,7 +1,7 @@
-from PIL import Image, GifImagePlugin, ImageFilter
+from PIL import Image, GifImagePlugin, ImageFilter, ImageOps
 from pytesseract import image_to_string
 
-def Fuckit(imageContent):
+def deCaptcha(imageContent, maxConfirmDepoint = 10):
     with Image.open(imageContent) as imageObject:
         imageObject.seek(1)
         grayImage = imageObject.convert("L")

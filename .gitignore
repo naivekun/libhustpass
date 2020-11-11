@@ -1,3 +1,7 @@
 .vscode/
-naivekun_test.py
-libhustpass/__pycache__
+*/__pycache__
+.eggs/
+*.egg-info/
+build/
+dist/
+.pytest_cache/
