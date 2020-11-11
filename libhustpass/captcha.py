@@ -62,4 +62,4 @@ def deCaptcha(imageContent, maxConfirmDepoint = 10):
             ret = code2
             break
         maxConfirmDepoint -= 1
-    return "".join([x.replace("o", "0").replace("O", "0") for x in ret if x not in ["\n", "\x0c"]])
+    return "".join([x.replace("o", "0").replace("O", "0") for x in ret if x in "Oo0123456789"])
