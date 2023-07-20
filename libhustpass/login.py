@@ -3,6 +3,16 @@ import libhustpass.captcha as captcha
 import requests
 import re
 import random
+import base64
+from Crypto.Cipher import PKCS1_v1_5 as Cipher_pksc1_v1_5
+from Crypto.PublicKey import RSA
+
+def encrypt(password, public_key):
+    rsakey = RSA.importKey(public_key)
+    cipher = Cipher_pksc1_v1_5.new(rsakey)
+    cipher_text = base64.b64encode(cipher.encrypt(password.encode()))
+    return cipher_text.decode()
+
 
 def toWideChar(data):
     data_bytes = bytes(data, encoding="utf-8")
@@ -50,8 +60,9 @@ def Enc(data, first_key, second_key, third_key):
 
 def login(username, password, url):
     r = requests.session()
-    login_html = r.get(url)
-    captcha_content = r.get("https://pass.hust.edu.cn/cas/code?"+str(random.random()), stream=True)
+    headers = {'User-Agent':'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/115.0.0.0 Safari/537.36'}
+    login_html = r.get(url, headers=headers)
+    captcha_content = r.get("https://pass.hust.edu.cn/cas/code?"+str(random.random()), stream=True,headers=headers)
     captcha_content.raw.decode_content = True
     nonce = re.search(
         '<input type="hidden" id="lt" name="lt" value="(.*)" />', login_html.text
@@ -59,17 +70,23 @@ def login(username, password, url):
     action = re.search(
         '<form id="loginForm" action="(.*)" method="post">', login_html.text
     ).group(1)
+    response = requests.post("http://pass.hust.edu.cn/cas/rsa",headers=headers)
+    data = response.json()
+    public_key = data['publicKey']
+    public_key = '-----BEGIN PUBLIC KEY-----\n' + public_key + '\n-----END PUBLIC KEY-----'
+    username_enc = encrypt(username, public_key)
+    password_enc = encrypt(password, public_key)
     post_params = {
         "code": captcha.deCaptcha(captcha_content.raw),
-        "rsa": Enc(username + password + nonce, "1", "2", "3"),
-        "ul": len(username),
-        "pl": len(password),
+        # "rsa": Enc(username + password + nonce, "1", "2", "3"),
+        "ul": username_enc,
+        "pl": password_enc,
         "lt": nonce,
-        "execution": "e1s1",
+        "execution": "e2s1",
         "_eventId": "submit",
     }
     redirect_html = r.post(
-        "https://pass.hust.edu.cn" + action, data=post_params, allow_redirects=False
+        "https://pass.hust.edu.cn" + action, data=post_params, allow_redirects=False,headers=headers
     )
     try:
         return redirect_html.headers["Location"]
