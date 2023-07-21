@@ -62,6 +62,7 @@ def login(username, password, url):
     r = requests.session()
     headers = {'User-Agent':'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/115.0.0.0 Safari/537.36'}
     login_html = r.get(url, headers=headers)
+    cookies = login_html.cookies.get_dict()
     captcha_content = r.get("https://pass.hust.edu.cn/cas/code?"+str(random.random()), stream=True,headers=headers)
     captcha_content.raw.decode_content = True
     nonce = re.search(
@@ -70,24 +71,29 @@ def login(username, password, url):
     action = re.search(
         '<form id="loginForm" action="(.*)" method="post">', login_html.text
     ).group(1)
-    response = requests.post("http://pass.hust.edu.cn/cas/rsa",headers=headers)
+    response = r.post("http://pass.hust.edu.cn/cas/rsa",headers=headers,cookies=cookies)
     data = response.json()
     public_key = data['publicKey']
+    print(public_key)
     public_key = '-----BEGIN PUBLIC KEY-----\n' + public_key + '\n-----END PUBLIC KEY-----'
     username_enc = encrypt(username, public_key)
     password_enc = encrypt(password, public_key)
     post_params = {
         "code": captcha.deCaptcha(captcha_content.raw),
-        # "rsa": Enc(username + password + nonce, "1", "2", "3"),
+        "rsa": "",
+        "phoneCode":"",
         "ul": username_enc,
         "pl": password_enc,
         "lt": nonce,
-        "execution": "e2s1",
+        "execution": "e1s1",
         "_eventId": "submit",
     }
+    print("https://pass.hust.edu.cn" + action)
+    print(post_params)
     redirect_html = r.post(
-        "https://pass.hust.edu.cn" + action, data=post_params, allow_redirects=False,headers=headers
+        "https://pass.hust.edu.cn" + action, data=post_params, allow_redirects=False,cookies=cookies,headers=headers
     )
+    print(redirect_html.text)
     try:
         return redirect_html.headers["Location"]
     except:
