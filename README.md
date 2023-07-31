@@ -3,7 +3,7 @@
 ![Python package](https://github.com/naivekun/libhustpass/workflows/Python%20package/badge.svg?branch=master)
 
 
-Since the fucking `pass.hust.edu.cn` site has changed the encryption method from RSA to **SB** DES, this lib would let you fuck it again.
+now the `pass.hust.edu.cn` changed the encryption method from DES to RSA again.
 
 ## Installation
 
@@ -33,22 +33,21 @@ print(ret.text)
 
 ## Implementation
 
-`des.js` uses some spacial `__pc1` (sbDes.py:270) to generate the DES 56-bit key
+`jsencryption.js` uses normal RSA to encrypt.
+
+so I use package **pycryptodome** to implement the RSA encryption.
 
 ```python
-__pc1 = [
-    56, 48, 40, 32, 24, 16,  8,
-    0, 57, 49, 41, 33, 25, 17,
-    9,  1, 58, 50, 42, 34, 26,
-    18, 10,  2, 59, 51, 43, 35,
-    27, 19, 11, 3, 60, 52, 44,
-    36, 28, 20, 12, 4, 61, 53,
-    45,  37, 29, 21, 13, 5, 62,
-    54, 46,  38, 30, 22, 14, 6 
-]
+from Crypto.Cipher import PKCS1_v1_5 as Cipher_pksc1_v1_5
+from Crypto.PublicKey import RSA
+
+def encrypt(password, public_key):
+    rsakey = RSA.importKey(public_key)
+    cipher = Cipher_pksc1_v1_5.new(rsakey)
+    cipher_text = base64.b64encode(cipher.encrypt(password.encode()))
+    return cipher_text.decode()
 ```
 
-So I modified pyDes.py(from the python library `pyDes`) to sbDes.py
 
 ## changelog
 
@@ -65,6 +64,11 @@ accuracy is 995/1000
 `captcha.py` uses library [Tesseract](https://tesseract-ocr.github.io/) to auto-fuck captcha
 
 Install Tesseract first !
+
+#### 20230723
+
+`pass.hust.edu.cn` use RSA to encrypt frontend input nows, libhustpass now support it.
+
 
 ## License
 

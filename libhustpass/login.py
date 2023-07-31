@@ -74,7 +74,6 @@ def login(username, password, url):
     response = r.post("http://pass.hust.edu.cn/cas/rsa",headers=headers,cookies=cookies)
     data = response.json()
     public_key = data['publicKey']
-    print(public_key)
     public_key = '-----BEGIN PUBLIC KEY-----\n' + public_key + '\n-----END PUBLIC KEY-----'
     username_enc = encrypt(username, public_key)
     password_enc = encrypt(password, public_key)
@@ -88,12 +87,9 @@ def login(username, password, url):
         "execution": "e1s1",
         "_eventId": "submit",
     }
-    print("https://pass.hust.edu.cn" + action)
-    print(post_params)
     redirect_html = r.post(
         "https://pass.hust.edu.cn" + action, data=post_params, allow_redirects=False,cookies=cookies,headers=headers
     )
-    print(redirect_html.text)
     try:
         return redirect_html.headers["Location"]
     except:
