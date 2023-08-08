@@ -1,3 +1,4 @@
 pillow
 pytesseract
 requests
+pycryptodome

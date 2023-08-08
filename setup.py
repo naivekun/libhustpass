@@ -13,7 +13,7 @@ setuptools.setup(
         "License :: OSI Approved :: MIT License",
         "Operating System :: OS Independent",
     ],
-    setup_requires=["pillow", "pytesseract", "pytest-runner"],
+    setup_requires=["pillow", "pytesseract", "pytest-runner", "pycryptodome"],
     tests_require=["pytest"],
     python_requires=">=3.6",
     test_suite="tests"
